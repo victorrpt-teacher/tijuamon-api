@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tijuamon API!</title>
+</head>
+<body>
+    <h1>Welcome to Tijuamon API!</h1>
+    <p>This is a simple Flask application.</p>
+        <h2>Available Endpoints</h2>
+    <ul>
+        <li><a href="/tijuamones">GET /tijuamones</a> – List all Tijuamones</li>
+        <li><a href="/tijuamones?type=agua">GET /tijuamones?type=agua</a> – Filter by type (example)</li>
+        <li><a href="/tijuamones?name=pi">GET /tijuamones?name=pi</a> – Filter by name fragment (example)</li>
+        <li><a href="/tijuamones?min_level=30">GET /tijuamones?min_level=30</a> – Filter by minimum level (example)</li>
+        <li><a href="/tijuamones/1">GET /tijuamones/&lt;id&gt;</a> – Retrieve a single Tijuamon</li>
+        <li><a href="/tijuamones" data-method="post">POST /tijuamones</a> – Create a Tijuamon</li>
+        <li><a href="/tijuamones/1" data-method="put">PUT /tijuamones/&lt;id&gt;</a> – Update a Tijuamon</li>
+        <li><a href="/tijuamones/1" data-method="delete">DELETE /tijuamones/&lt;id&gt;</a> – Delete a Tijuamon</li>
+        <li><a href="/batalla">POST /batalla</a> – Simulate battle (optional)</li>
+        <li><a href="/estadisticas">GET /estadisticas</a> – View statistics (optional)</li>
+    </ul>
+</body>
+</html>
