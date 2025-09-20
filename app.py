@@ -13,5 +13,9 @@ tijuamones = [
 def home():
     return render_template('index.html')
 
+@app.route('/tijuamones', methods=['GET'])
+def get_tijuamones():
+    return jsonify(tijuamones)
+
 if __name__ == "__main__":
     app.run(debug=True)
