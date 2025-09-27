@@ -1,18 +1,7 @@
 from flask import Flask, jsonify, request, render_template # Import Flask and related modules
-from models.tijuamon import Tijuamon # Import the Tijuamon model
+from models import Tijuamon # Import the Tijuamon model
 
 app = Flask(__name__) # Create a Flask application instance
-
-
-tijuamon1 = Tijuamon(
-    name="Caguamon", 
-    type="Water",
-    level=5,
-    hp=30,
-    attack=15,
-    defense=10,
-    habilities=["Bottle Thrower", "Smell Attack"]
-    )
 
 
 # Memory storage for items
