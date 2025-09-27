@@ -50,7 +50,8 @@ Proyecto guía desarrollado por el profesor Ricardo Pérez Torres para la materi
 classDiagram
     Trainer <|-- Tijuaball
     Tijuaball <|-- Tijuamon
-    Trainer : +int name
+    Trainer : +String name
+    Trainer : +int edad
     Tijuaball : +Trainer Trainer
     Tijuaball : +Tijuamon Tijuamon FK
     Tijuamon : +String name
@@ -62,4 +63,5 @@ classDiagram
     Tijuamon : +Int attack
     Tijuamon : +Int defense
     Tijuamon : +List[String] habilities
+    
 ```
