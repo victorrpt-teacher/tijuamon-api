@@ -7,7 +7,7 @@ class Tijuamon:
     """Represents a Tijuamon creature that can participate in battles or be captured.
 
     Attributes:
-        identifier: Optional numeric id used to distinguish the creature in storage.
+        id: Optional numeric id used to distinguish the creature in storage.
         name: Public name used to identify the creature.
         element_type: Elemental affinity (e.g. fire, water) used for typing advantages.
         level: Experience-based level that typically scales stats.
@@ -26,7 +26,7 @@ class Tijuamon:
         attack: int = 10,
         defense: int = 10,
         habilities: Sequence[str] | None = None,
-        identifier: int | None = None,
+        id: int | None = None,
     ) -> None:
         """Initializes a Tijuamon with combat statistics and optional abilities.
 
@@ -38,9 +38,9 @@ class Tijuamon:
             attack: Base attack stat used when dealing physical damage.
             defense: Base defense stat used when receiving physical damage.
             habilities: Optional iterable of ability names that the creature knows.
-            identifier: Optional numeric id that can be used for lookups in APIs.
+            id: Optional numeric id that can be used for lookups in APIs.
         """
-        self.id = identifier
+        self.id = id
         self.name = name
         self.element_type = element_type
         self.level = level
@@ -62,7 +62,7 @@ class Tijuamon:
             "defense": self.defense,
             "habilities": list(self.habilities),
         }
-        # Remove None id to keep payloads compact when an identifier is not set.
+        # Remove None id to keep payloads compact when an id is not set.
         if self.id is None:
             payload.pop("id")
         return payload
@@ -84,12 +84,12 @@ class Tijuamon:
         else:
             habilities = []
 
-        identifier = data.get("id")
-        if identifier is not None:
+        id = data.get("id")
+        if id is not None:
             try:
-                identifier = int(identifier)
+                id = int(id)
             except (TypeError, ValueError):
-                identifier = None
+                id = None
 
         return cls(
             name=str(data.get("name", "")),
@@ -99,5 +99,5 @@ class Tijuamon:
             attack=int(data.get("attack", 10)),
             defense=int(data.get("defense", 10)),
             habilities=habilities,
-            identifier=identifier,
+            id=id,
         )

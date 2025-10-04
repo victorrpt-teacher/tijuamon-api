@@ -7,7 +7,7 @@ blueprint = Blueprint('tijuamones', __name__)
 # Sample in-memory data
 tijuamones: list[Tijuamon] = [
     Tijuamon(
-        identifier=1,
+        id=1,
         name="Caguamon",
         element_type="Water",
         level=5,
@@ -17,7 +17,7 @@ tijuamones: list[Tijuamon] = [
         habilities=["Bottle Thrower", "Smell Attack"],
     ),
     Tijuamon(
-        identifier=2,
+        id=2,
         name="Choloko",
         element_type="Fire",
         level=7,
@@ -27,7 +27,7 @@ tijuamones: list[Tijuamon] = [
         habilities=["Smoke", "Knife Thrower"],
     ),
     Tijuamon(
-        identifier=3,
+        id=3,
         name="Canalin",
         element_type="Dirt",
         level=6,
@@ -37,7 +37,7 @@ tijuamones: list[Tijuamon] = [
         habilities=["Poisoned Water Thrower", "Mud Attack"],
     ),
     Tijuamon(
-        identifier=4,
+        id=4,
         name="BurroCebra",
         element_type="Normal",
         level=8,
@@ -47,7 +47,7 @@ tijuamones: list[Tijuamon] = [
         habilities=["Tourist Trap", "Slow Attack"],
     ),
     Tijuamon(
-        identifier=5,
+        id=5,
         name="Mimoy",
         element_type="Psych",
         level=10,
@@ -57,7 +57,7 @@ tijuamones: list[Tijuamon] = [
         habilities=["Mind Control", "Hypnosis"],
     ),
     Tijuamon(
-        identifier=6,
+        id=6,
         name="Maguana",
         element_type="Fire",
         level=9,
@@ -73,10 +73,15 @@ def get_tijuamones():
     """Returns the full list of Tijuamon creatures in JSON format."""
     return jsonify([tijuamon.to_dict() for tijuamon in tijuamones])
 
-@blueprint.route('/<int:identifier>', methods=['GET'])
-def get_tijuamon(identifier: int):
-    """Returns a specific Tijuamon by its identifier in JSON format."""
-    tijuamon = next((t for t in tijuamones if t.identifier == identifier), None)
+@blueprint.route('/<int:id>', methods=['GET'])
+def get_tijuamon(id: int):
+    """Returns a specific Tijuamon by its id in JSON format."""
+    tijuamon = next((t for t in tijuamones if t.id == id), None)
     if tijuamon:
         return jsonify(tijuamon.to_dict())
     return jsonify({"error": "Tijuamon not found"}), 404
+
+@blueprint.route('/', methods=['POST'])
+def create_tijuamon():
+    """Creates a new Tijuamon. (Not implemented)"""
+    return jsonify({"message": "Create Tijuamon endpoint not implemented"}), 501

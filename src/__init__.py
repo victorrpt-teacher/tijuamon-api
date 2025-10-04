@@ -23,8 +23,6 @@ def _load_config(app: Flask, config_object: str | None) -> None:
         app.config.from_object(config_object)
 
 
-
-
 def _register_extensions(app: Flask) -> None:
     """Register Flask extensions."""
     # db.init_app(app)
