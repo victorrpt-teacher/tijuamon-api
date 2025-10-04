@@ -1,1 +1,0 @@
-# capa de acceso de datos (memoria, sqlite)
