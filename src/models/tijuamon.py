@@ -1,58 +1,37 @@
 from __future__ import annotations
 
-from typing import Iterable, Sequence
+from sqlalchemy import JSON
+
+from src.extensions import db
 
 
-class Tijuamon:
-    """Represents a Tijuamon creature that can participate in battles or be captured.
+class Tijuamon(db.Model):
+    """Represents an individual Tijuamon creature owned by a trainer."""
 
-    Attributes:
-        id: Optional numeric id used to distinguish the creature in storage.
-        name: Public name used to identify the creature.
-        element_type: Elemental affinity (e.g. fire, water) used for typing advantages.
-        level: Experience-based level that typically scales stats.
-        hp: Current hit points that determine when the creature faints.
-        attack: Base physical attack strength.
-        defense: Base physical defense strength.
-        habilities: List of special moves or abilities the creature can use.
-    """
+    __tablename__ = "tijuamones"
 
-    def __init__(
-        self,
-        name: str,
-        element_type: str,
-        level: int = 1,
-        hp: int = 20,
-        attack: int = 10,
-        defense: int = 10,
-        habilities: Sequence[str] | None = None,
-        id: int | None = None,
-    ) -> None:
-        """Initializes a Tijuamon with combat statistics and optional abilities.
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(80), nullable=False)
+    element_type = db.Column(db.String(40), nullable=False)
+    level = db.Column(db.Integer, nullable=False, default=1)
+    hp = db.Column(db.Integer, nullable=False, default=20)
+    attack = db.Column(db.Integer, nullable=False, default=10)
+    defense = db.Column(db.Integer, nullable=False, default=10)
+    habilities = db.Column(JSON, nullable=False, default=list)
 
-        Args:
-            name: Display name for the creature.
-            element_type: Elemental affinity or category used in battle matchups.
-            level: Starting level; higher levels usually grant better stats.
-            hp: Base hit points; decrease to zero to faint.
-            attack: Base attack stat used when dealing physical damage.
-            defense: Base defense stat used when receiving physical damage.
-            habilities: Optional iterable of ability names that the creature knows.
-            id: Optional numeric id that can be used for lookups in APIs.
-        """
-        self.id = id
-        self.name = name
-        self.element_type = element_type
-        self.level = level
-        self.hp = hp
-        self.attack = attack
-        self.defense = defense
-        self.habilities = list(habilities) if habilities else []
-        self.type = self.element_type  # Backward compatible alias for legacy code.
+    trainer_id = db.Column(
+        db.Integer,
+        db.ForeignKey("trainers.id", ondelete="SET NULL"),
+        nullable=True,
+    )
+    trainer = db.relationship(
+        "Trainer",
+        back_populates="tijuamones",
+    )
 
     def to_dict(self) -> dict[str, object]:
-        """Converts the creature into a JSON-serializable dictionary for API responses."""
-        payload = {
+        """Convert the creature into a JSON-serializable dictionary for API responses."""
+        return {
             "id": self.id,
             "name": self.name,
             "element_type": self.element_type,
@@ -60,44 +39,6 @@ class Tijuamon:
             "hp": self.hp,
             "attack": self.attack,
             "defense": self.defense,
-            "habilities": list(self.habilities),
+            "habilities": list(self.habilities or []),
+            "trainer_id": self.trainer_id,
         }
-        # Remove None id to keep payloads compact when an id is not set.
-        if self.id is None:
-            payload.pop("id")
-        return payload
-
-    @classmethod
-    def from_dict(cls, data: dict[str, object]) -> "Tijuamon":
-        """Builds a Tijuamon instance from a serialized dictionary.
-
-        Args:
-            data: Dictionary with the same keys produced by ``to_dict``.
-
-        Returns:
-            A populated ``Tijuamon`` instance.
-        """
-        habilities_data = data.get("habilities")
-        # Ensure habilities is a list of strings; default to empty list if invalid.
-        if isinstance(habilities_data, Iterable) and not isinstance(habilities_data, (str, bytes)):
-            habilities = list(habilities_data)
-        else:
-            habilities = []
-
-        id = data.get("id")
-        if id is not None:
-            try:
-                id = int(id)
-            except (TypeError, ValueError):
-                id = None
-
-        return cls(
-            name=str(data.get("name", "")),
-            element_type=str(data.get("element_type", "")),
-            level=int(data.get("level", 1)),
-            hp=int(data.get("hp", 20)),
-            attack=int(data.get("attack", 10)),
-            defense=int(data.get("defense", 10)),
-            habilities=habilities,
-            id=id,
-        )

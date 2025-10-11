@@ -1,87 +1,33 @@
 # blueprints  (routes) per resource
 from flask import Blueprint, jsonify
 from src.models import Tijuamon
+from src.extensions import db   # Import the db instance
 
 blueprint = Blueprint('tijuamones', __name__)
-
-# Sample in-memory data
-tijuamones: list[Tijuamon] = [
-    Tijuamon(
-        id=1,
-        name="Caguamon",
-        element_type="Water",
-        level=5,
-        hp=30,
-        attack=15,
-        defense=10,
-        habilities=["Bottle Thrower", "Smell Attack"],
-    ),
-    Tijuamon(
-        id=2,
-        name="Choloko",
-        element_type="Fire",
-        level=7,
-        hp=40,
-        attack=12,
-        defense=14,
-        habilities=["Smoke", "Knife Thrower"],
-    ),
-    Tijuamon(
-        id=3,
-        name="Canalin",
-        element_type="Dirt",
-        level=6,
-        hp=35,
-        attack=14,
-        defense=12,
-        habilities=["Poisoned Water Thrower", "Mud Attack"],
-    ),
-    Tijuamon(
-        id=4,
-        name="BurroCebra",
-        element_type="Normal",
-        level=8,
-        hp=45,
-        attack=18,
-        defense=11,
-        habilities=["Tourist Trap", "Slow Attack"],
-    ),
-    Tijuamon(
-        id=5,
-        name="Mimoy",
-        element_type="Psych",
-        level=10,
-        hp=50,
-        attack=20,
-        defense=15,
-        habilities=["Mind Control", "Hypnosis"],
-    ),
-    Tijuamon(
-        id=6,
-        name="Maguana",
-        element_type="Fire",
-        level=9,
-        hp=48,
-        attack=22,
-        defense=13,
-        habilities=["Flame Tail", "Heat Wave"],
-    ),
-]
 
 @blueprint.route('/', methods=['GET'])
 def get_tijuamones():
     """Returns the full list of Tijuamon creatures in JSON format."""
-    return jsonify([tijuamon.to_dict() for tijuamon in tijuamones])
+    tijuamones = Tijuamon.query.all()  # Example of using the db instance
+    return jsonify([t.to_dict() for t in tijuamones])
 
 @blueprint.route('/<int:id>', methods=['GET'])
-def get_tijuamon(id: int):
-    """Returns a specific Tijuamon by its id in JSON format."""
-    tijuamon = next((t for t in tijuamones if t.id == id), None)
-    if tijuamon:
-        return jsonify(tijuamon.to_dict())
-    return jsonify({"error": "Tijuamon not found"}), 404
+def get_tijuamon(id):
+    """Returns a single Tijuamon by ID in JSON format."""
+    tijuamon = Tijuamon.query.get_or_404(id)  # Example of using the db instance
+    return jsonify(tijuamon.to_dict())
 
 @blueprint.route('/', methods=['POST'])
 def create_tijuamon():
-    """Creates a new Tijuamon. (Not implemented)"""
-    return jsonify({"message": "Create Tijuamon endpoint not implemented"}), 501
+    """Creates a new Tijuamon. (Implementation omitted for brevity)"""
+    return jsonify({"message": "Create Tijuamon endpoint"}), 201
+
+@blueprint.route('/<int:id>', methods=['PUT'])
+def update_tijuamon(id):
+    """Updates an existing Tijuamon. (Implementation omitted for brevity)"""
+    return jsonify({"message": f"Update Tijuamon {id} endpoint"})
+
+@blueprint.route('/<int:id>', methods=['DELETE'])
+def delete_tijuamon(id):
+    """Deletes a Tijuamon. (Implementation omitted for brevity)"""
+    return jsonify({"message": f"Delete Tijuamon {id} endpoint"})

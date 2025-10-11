@@ -4,4 +4,19 @@ __pycache__/
 env/
 *.db
 *.sqlite3
+# new entries
+*.sqlite
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
 .DS_Store
+.env
+.flaskenv
+.vscode/
+.idea/
+instance/
+dist/
+build/
+*.egg-info/
+*.log

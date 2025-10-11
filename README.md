@@ -1,67 +1,73 @@
-# 🐲 Tijuamón API
+# Tijuamon API
 
-API REST educativa en **Python + Flask** para gestionar criaturas ficticias llamadas **Tijuamones**, inspiradas en Tijuana.
+API REST educativa construida con **Python + Flask** para practicar fundamentos de backend gestionando criaturas ficticias llamadas **Tijuamones**.
 
-## 🚀 Objetivos
-- Practicar desarrollo Backend con Python.
-- Implementar CRUD con Flask.
-- Conectar colecciones en memoria y luego migrar a SQLite.
-- Enseñar colaboración en GitHub (commits, ramas, PRs).
+## Objetivos
+- Practicar desarrollo backend con Flask y SQLAlchemy.
+- Exponer endpoints CRUD básicos sobre un modelo sencillo.
+- Aprender a versionar la base de datos con Flask-Migrate (Alembic).
+- Reforzar colaboración con Git (commits, ramas, PRs).
 
-## ⚙️ Instalación
+## Instalación
 ```bash
 git clone https://github.com/<usuario>/tijuamon-api.git
 cd tijuamon-api
-python3 -m venv .venv # or py -3 -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+python -m venv .venv          # Windows: py -3 -m venv .venv
+.venv\Scripts\activate        # Mac/Linux: source .venv/bin/activate
 pip install -r requirements.txt
-python app.py
 ```
 
-## Entidades
-Entidad principal: Tijuamon
-Attributos minimos:
-- id (int, autoincremental)
-- nombre (str, único)
-- tipo (str; p. ej., “fuego”, “agua”, “eléctrico”, “planta”, “normal”)
-- nivel (int 1–100)
-- hp (int > 0)
-- ataque (int ≥ 0)
-- defensa (int ≥ 0)
+## Configuración de entorno
+```bash
+set FLASK_APP=app.py                 # Mac/Linux: export FLASK_APP=app.py
+set ENV_CONFIG=DevelopmentConfig     # Mac/Linux: export ENV_CONFIG=DevelopmentConfig
+```
 
+## Migraciones de base de datos
+```bash
+flask db init              # Ejecutar una sola vez
+flask db migrate -m "Inicial"
+flask db upgrade
+```
 
-habilidades (lista de strings; opcional en MVP, puede empezar como string separada por comas)
-## 📡 Endpoints
-- ``POST /tijuamones`` → Crear Tijuamón
-- ``GET /tijuamones`` → Listar Tijuamones
-    - ``?tipo=agua ?nombre=pi (contiene) ?min_nivel=30``
-- ``GET /tijuamones/<id>`` → Consultar uno
-- ``PUT /tijuamones/<id>`` → Actualizar
-- ``DELETE /tijuamones/<id>`` → Eliminar
-- ``(Opcional) POST /batalla`` → Simular batalla
-- ``(Opcional) GET /estadisticas`` → Estadísticas
+> Asegúrate de haber creado `src/extensions.py` con `db = SQLAlchemy()` y `migrate = Migrate()`
+> y de inicializarlos en `src/__init__.py` antes de correr los comandos.
 
-## 👥 Equipo
+## Cargar datos iniciales (seed)
+```bash
+flask seed                 # Inserta entrenadores y tijuamones de ejemplo
+```
+
+> El comando `seed` vive en `src/__init__.py` y puedes editarlo para agregar más registros.
+
+## Ejecutar la aplicación
+```bash
+flask run                  # Servidor de desarrollo
+```
+
+## Entidades principales
+- **Tijuamon**
+  - `id`: int (autoincremental)
+  - `name`: str (nombre público)
+  - `element_type`: str (por ejemplo: water, fire, electric)
+  - `level`: int (rango 1–100 sugerido)
+  - `hp`, `attack`, `defense`: ints > 0
+  - `habilities`: lista de strings
+- **Trainer**
+  - `id`: int
+  - `username`: str único
+  - `email`: str único
+  - `password_hash`: str
+
+## Endpoints previstos
+- `POST /tijuamones` — Crear un Tijuamon
+- `GET /tijuamones` — Listar Tijuamones
+  - filtros sugeridos: `?element_type=water`, `?name=pi`, `?min_level=30`
+- `GET /tijuamones/<id>` — Consultar uno
+- `PUT /tijuamones/<id>` — Actualizar
+- `DELETE /tijuamones/<id>` — Eliminar
+- (Opcional) `POST /batalla` — Simulación de combate
+- (Opcional) `GET /estadisticas` — Estadísticas agregadas
+
+## Equipo
 Proyecto guía desarrollado por el profesor Ricardo Pérez Torres para la materia Backend I (CESUN).
-
-## Diagrama de clases
-
-```mermaid
-classDiagram
-    Trainer <|-- Tijuaball
-    Tijuaball <|-- Tijuamon
-    Trainer : +String name
-    Trainer : +int edad
-    Tijuaball : +Trainer Trainer
-    Tijuaball : +Tijuamon Tijuamon FK
-    Tijuamon : +String name
-    Tijuamon: +String 
-    Tijuamon:  +String name
-    Tijuamon:  +String type
-    Tijuamon : +int level
-    Tijuamon : +Int hp
-    Tijuamon : +Int attack
-    Tijuamon : +Int defense
-    Tijuamon : +List[String] habilities
-    
-```
